@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -55,7 +56,10 @@ import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.PkgConfig
+import dev.utils.app.AppUtils.getPackageManager
 
+private val pm: PackageManager
+    get() = getPackageManager()
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Destination<RootGraph>
@@ -159,7 +163,8 @@ private fun AppItem(
         headlineContent = { Text(app.label) },
         leadingContent = {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(app.packageInfo)
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(app.applicationInfo.loadIcon(pm))
                     .crossfade(true).build(),
                 contentDescription = app.label,
                 modifier = Modifier
